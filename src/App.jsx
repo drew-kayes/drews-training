@@ -22,46 +22,51 @@ const api = async (path, method = "GET", body = null) => {
 };
 
 const BENCH_PROGRAM = [
-  { week: 1, phase: "Volume", sets: 4, reps: 8, weight: 155, note: "Focus on form. Controlled negative." },
-  { week: 1, phase: "Volume", sets: 4, reps: 8, weight: 155, note: "Same as first session." },
-  { week: 2, phase: "Volume", sets: 4, reps: 8, weight: 160, note: "Add 5 lbs. Keep form tight." },
-  { week: 2, phase: "Volume", sets: 4, reps: 8, weight: 160, note: "" },
-  { week: 3, phase: "Volume", sets: 4, reps: 8, weight: 165, note: "Up 5 lbs again." },
-  { week: 3, phase: "Volume", sets: 4, reps: 8, weight: 165, note: "" },
-  { week: 4, phase: "Deload", sets: 3, reps: 8, weight: 150, note: "Deload week. Back off, recover." },
-  { week: 4, phase: "Deload", sets: 3, reps: 8, weight: 150, note: "" },
-  { week: 5, phase: "Strength", sets: 5, reps: 5, weight: 175, note: "Phase 2. Heavier, fewer reps." },
-  { week: 5, phase: "Strength", sets: 5, reps: 5, weight: 175, note: "" },
-  { week: 6, phase: "Strength", sets: 5, reps: 5, weight: 182, note: "+7 lbs." },
-  { week: 6, phase: "Strength", sets: 5, reps: 5, weight: 182, note: "" },
-  { week: 7, phase: "Strength", sets: 5, reps: 5, weight: 189, note: "+7 lbs." },
-  { week: 7, phase: "Strength", sets: 5, reps: 5, weight: 189, note: "" },
-  { week: 8, phase: "Deload", sets: 3, reps: 5, weight: 165, note: "Deload. Let your CNS recover." },
-  { week: 8, phase: "Deload", sets: 3, reps: 5, weight: 165, note: "" },
-  { week: 9, phase: "Power", sets: 4, reps: 3, weight: 195, note: "Phase 3. Heavy triples." },
-  { week: 9, phase: "Power", sets: 4, reps: 3, weight: 195, note: "" },
-  { week: 10, phase: "Power", sets: 4, reps: 3, weight: 202, note: "+7 lbs." },
-  { week: 10, phase: "Power", sets: 4, reps: 3, weight: 202, note: "" },
-  { week: 11, phase: "Power", sets: 4, reps: 3, weight: 209, note: "+7 lbs. Close to current 1RM." },
-  { week: 11, phase: "Power", sets: 4, reps: 3, weight: 209, note: "" },
-  { week: 12, phase: "Deload", sets: 3, reps: 3, weight: 185, note: "Deload before peak phase." },
-  { week: 12, phase: "Deload", sets: 3, reps: 3, weight: 185, note: "" },
-  { week: 13, phase: "Peak", sets: 3, reps: 2, weight: 215, note: "Peak phase. Doubles above old 1RM." },
-  { week: 13, phase: "Peak", sets: 3, reps: 2, weight: 215, note: "" },
-  { week: 14, phase: "Peak", sets: 3, reps: 2, weight: 220, note: "+5 lbs." },
-  { week: 14, phase: "Peak", sets: 3, reps: 2, weight: 220, note: "" },
-  { week: 15, phase: "Peak", sets: 2, reps: 1, weight: 230, note: "Singles. Build to near max." },
-  { week: 15, phase: "Peak", sets: 2, reps: 1, weight: 235, note: "Second session -- push to 235." },
-  { week: 16, phase: "Test", sets: 1, reps: 1, weight: 240, note: "Test week. New 1RM attempt: 240 lbs." },
-  { week: 16, phase: "Test", sets: 1, reps: 1, weight: 240, note: "Second attempt if needed." },
+  { week: 1, phase: "Re-Entry", sets: 4, reps: 6, weight: 185, note: "Back at it. Reset baseline off a clean 225 single. Controlled tempo, no grinding." },
+  { week: 1, phase: "Re-Entry", sets: 4, reps: 6, weight: 190, note: "Second session. Should still feel manageable." },
+  { week: 2, phase: "Re-Entry", sets: 4, reps: 5, weight: 195, note: "Bar speed should be fast. If it grinds, hold here next time." },
+  { week: 2, phase: "Re-Entry", sets: 4, reps: 5, weight: 200, note: "" },
+  { week: 3, phase: "Build", sets: 5, reps: 5, weight: 205, note: "Volume ramp. Back to full training load." },
+  { week: 3, phase: "Build", sets: 4, reps: 4, weight: 212, note: "Heavier double session." },
+  { week: 4, phase: "Deload", sets: 3, reps: 5, weight: 190, note: "Deload. Back off, let shoulders and elbows recover." },
+  { week: 4, phase: "Deload", sets: 3, reps: 5, weight: 195, note: "" },
+  { week: 5, phase: "Strength", sets: 5, reps: 3, weight: 218, note: "Heavy triples begin." },
+  { week: 5, phase: "Strength", sets: 4, reps: 3, weight: 225, note: "Back to your old 1RM -- now for a triple." },
+  { week: 6, phase: "Strength", sets: 4, reps: 2, weight: 232, note: "Above old max, for doubles." },
+  { week: 6, phase: "Strength", sets: 3, reps: 2, weight: 238, note: "" },
+  { week: 7, phase: "Peak", sets: 3, reps: 3, weight: 210, note: "Short deload before peak. Stay sharp, don't grind." },
+  { week: 7, phase: "Peak", sets: 2, reps: 1, weight: 245, note: "Opening single attempt at new territory." },
+  { week: 8, phase: "Test", sets: 2, reps: 1, weight: 250, note: "Build to a clean single at 250." },
+  { week: 8, phase: "Test", sets: 1, reps: 1, weight: 255, note: "Test day. New 1RM attempt: 255 lbs." },
 ];
+
+const WARMUP = [
+  { id: "w_couch", name: "Couch Stretch", reps: "1 min/side" },
+  { id: "w_9090", name: "90/90 Hip Stretch", reps: "1 min/side" },
+  { id: "w_ankle", name: "Ankle Circles", reps: "30 sec/side" },
+  { id: "w_shoulder", name: "Shoulder Pass-Throughs", reps: "15 reps" },
+  { id: "w_arm", name: "Arm Circles (fwd + back)", reps: "30 sec each" },
+  { id: "w_catcow", name: "Cat-Cow", reps: "10 reps" },
+  { id: "w_wgs", name: "World's Greatest Stretch", reps: "5 reps/side" },
+];
+
+// Ramp for programmed bench warmup sets, applied against the day's prescribed weight.
+const BENCH_WARMUP_RAMP = [
+  { pct: 0.5, reps: 8 },
+  { pct: 0.7, reps: 5 },
+  { pct: 0.85, reps: 3 },
+];
+
+function stretchLink(name) {
+  return `https://www.youtube.com/results?search_query=${encodeURIComponent(name + " stretch tutorial")}`;
+}
 
 const DEFAULT_DAYS = [
   {
-    id: "day1", label: "Day 1", title: "Chest / Shoulders / Tris", color: "#2563eb",
-    note: "Bench follows the 16-week program.",
+    id: "day1", label: "Monday", title: "Chest / Shoulders / Tris", color: "#2563eb",
+    note: "Bench follows the 8-week program.",
     exercises: [
-      { id: "bench", name: "Flat Barbell Bench Press", sets: 4, reps: "6", note: "See bench program for prescribed weight/reps.", programmed: true },
+      { id: "bench", name: "Flat Barbell Bench Press", sets: 4, reps: "6", note: "See bench program for prescribed weight/reps.", programmed: true, warmupSets: 3 },
       { id: "incline_db", name: "Incline Dumbbell Press", sets: 3, reps: "10", note: "" },
       { id: "cable_lat", name: "Cable Lateral Raises", sets: 4, reps: "15", note: "Light. Lead with elbow. Pause at top." },
       { id: "ohp", name: "Overhead Dumbbell Press", sets: 3, reps: "10", note: "" },
@@ -70,40 +75,39 @@ const DEFAULT_DAYS = [
     ],
   },
   {
-    id: "day2", label: "Day 2", title: "Back / Biceps", color: "#7c3aed",
-    note: "Incline curl and hammer curl are the arm thickness drivers.",
+    id: "day2", label: "Tuesday", title: "Back / Biceps", color: "#7c3aed",
+    note: "Preacher curl and hammer curl are the arm thickness drivers.",
     exercises: [
       { id: "pullup", name: "Weighted Pull-ups / Lat Pulldown", sets: 4, reps: "10", note: "Full hang at bottom." },
       { id: "cable_row", name: "Seated Cable Row", sets: 4, reps: "12", note: "Elbows tight. Squeeze at peak." },
-      { id: "incline_curl", name: "Incline Dumbbell Curl", sets: 3, reps: "12", note: "Long head stretch. Builds peak." },
+      { id: "preacher_curl", name: "Preacher Curl", sets: 3, reps: "12", note: "Strict. No swinging. Full extension at bottom." },
       { id: "hammer", name: "Hammer Curl", sets: 3, reps: "12", note: "" },
       { id: "reverse_curl", name: "Reverse Curl", sets: 3, reps: "15", note: "Forearm size." },
       { id: "calf_d2", name: "Calf Raises (standing)", sets: 4, reps: "15", note: "Full stretch. Slow negative." },
     ],
   },
   {
-    id: "day3", label: "Day 3", title: "Legs", color: "#059669",
-    note: "Start light. Form first. Weeks 1-4: sled + RDL + calves only.",
+    id: "day3", label: "Thursday", title: "Legs", color: "#059669",
+    note: "Sled, RDL, leg extension, hip thrust. Calves every session.",
     exercises: [
-      { id: "sled", name: "Sled Press", sets: 3, reps: "10", note: "Feet low and close. Full depth.", phase1: true },
-      { id: "rdl", name: "Romanian Deadlift", sets: 3, reps: "12", note: "Hips back. Bar drags down legs.", phase1: true },
-      { id: "stand_calf", name: "Standing Calf Raise", sets: 5, reps: "15", note: "Heavy. 3-sec negative. Full stretch.", phase1: true },
-      { id: "seat_calf", name: "Seated Calf Raise", sets: 3, reps: "20", note: "Hits soleus. Different angle.", phase1: true },
-      { id: "leg_press", name: "Leg Press (add wk 5)", sets: 3, reps: "12", note: "Same foot position as sled.", phase1: false },
-      { id: "lunges", name: "Walking Lunges (add wk 5)", sets: 3, reps: "20", note: "Full stride.", phase1: false },
-      { id: "leg_ext", name: "Leg Extension (add wk 6)", sets: 3, reps: "15", note: "Full contraction at top.", phase1: false },
+      { id: "sled", name: "Sled Press", sets: 3, reps: "10", note: "Feet low and close. Full depth.", warmupSets: 2 },
+      { id: "rdl", name: "Romanian Deadlift", sets: 3, reps: "12", note: "Hips back. Bar drags down legs." },
+      { id: "leg_ext", name: "Leg Extension Machine", sets: 3, reps: "15", note: "Quad iso. Full contraction at top, slow negative." },
+      { id: "hip_thrust", name: "Hip Thrust Machine", sets: 3, reps: "12", note: "Glute iso. Pause and squeeze at the top." },
+      { id: "stand_calf", name: "Standing Calf Raise", sets: 5, reps: "15", note: "Heavy. 3-sec negative. Full stretch." },
+      { id: "seat_calf", name: "Seated Calf Raise", sets: 3, reps: "20", note: "Hits soleus. Different angle." },
     ],
   },
   {
-    id: "day4", label: "Day 4", title: "Swim", color: "#0284c7",
+    id: "day4", label: "Flexible", title: "Swim", color: "#0284c7",
     note: "Keep it. 1-2x per week. Do not trade for a lifting session.",
     swim: true, exercises: [],
   },
   {
-    id: "day5", label: "Day 5", title: "Chest / Shoulders / Tris", color: "#2563eb",
+    id: "day5", label: "Friday", title: "Chest / Shoulders / Tris", color: "#2563eb",
     note: "Second bench session of the week. Follow the program.",
     exercises: [
-      { id: "bench_d5", name: "Flat Barbell Bench Press", sets: 4, reps: "6", note: "See bench program for prescribed weight/reps.", programmed: true },
+      { id: "bench_d5", name: "Flat Barbell Bench Press", sets: 4, reps: "6", note: "See bench program for prescribed weight/reps.", programmed: true, warmupSets: 3 },
       { id: "cable_fly", name: "Cable Fly / Pec Deck", sets: 3, reps: "12", note: "Full stretch at open position." },
       { id: "arnold", name: "Arnold Press", sets: 3, reps: "10", note: "Full rotation. All three delt heads." },
       { id: "lat_drop", name: "Lateral Raise Dropset", sets: 3, reps: "Failure", note: "Start heavy, drop 3x." },
@@ -112,19 +116,19 @@ const DEFAULT_DAYS = [
     ],
   },
   {
-    id: "day6", label: "Day 6", title: "Back / Biceps", color: "#7c3aed",
+    id: "day6", label: "Saturday / Sunday", title: "Back / Biceps", color: "#7c3aed",
     note: "Heaviest row of the week. Face pulls are shoulder health insurance.",
     exercises: [
       { id: "tbar", name: "Barbell / T-Bar Row", sets: 4, reps: "10", note: "Heaviest row of the week." },
       { id: "single_row", name: "Single Arm Dumbbell Row", sets: 3, reps: "12", note: "Full range. Lat stretch at bottom." },
       { id: "face_pull", name: "Face Pulls", sets: 3, reps: "20", note: "Rear delt + rotator cuff. Do not skip." },
-      { id: "incline_curl2", name: "Incline Dumbbell Curl", sets: 3, reps: "12", note: "Frequency builds size." },
+      { id: "preacher_curl2", name: "Preacher Curl", sets: 3, reps: "12", note: "Frequency builds size." },
       { id: "farmer", name: "Farmer Carry (40 yds)", sets: 3, reps: "40 yds", note: "Grip, forearms, traps. Go heavy." },
       { id: "calf_d6", name: "Calf Raises (standing)", sets: 4, reps: "15", note: "Full stretch. Slow negative." },
     ],
   },
   {
-    id: "day7", label: "Day 7", title: "Active Recovery", color: "#d97706",
+    id: "day7", label: "Flexible", title: "Active Recovery", color: "#d97706",
     note: "10-15 min. Directly impacts squat depth and calf flexibility.",
     mobility: true,
     exercises: [
@@ -265,8 +269,8 @@ export default function App() {
   };
 
   const getBenchPrescription = () => {
-    // Offset: completed 10 sessions (through Week 5, Session 1 @ 175lbs 5x5)
-    const COMPLETED = 10;
+    // Reset July 2026: fresh 8-week program off a 225 baseline.
+    const COMPLETED = 0;
     const idx = Math.min(COMPLETED + benchLog.length, BENCH_PROGRAM.length - 1);
     return BENCH_PROGRAM[idx];
   };
@@ -446,7 +450,7 @@ function DayScreen({ day, session, activeExercise, setActiveExercise, updateSet,
       <div style={{ flex: 1, overflowY: "auto", padding: 20 }}>
         {exercises.map(ex => (
           <div key={ex.id} style={{ background: "#15151e", border: "1px solid #1e1e28", borderRadius: 10, padding: "14px 16px", marginBottom: 10 }}>
-            <div style={{ fontWeight: 600, fontSize: 15 }}>{ex.name}</div>
+            <a href={stretchLink(ex.name)} target="_blank" rel="noopener noreferrer" style={{ fontWeight: 600, fontSize: 15, color: "#f0f0f0", textDecoration: "underline", textDecorationColor: "#2a2a38" }}>{ex.name}</a>
             <div style={{ color: day.color, fontSize: 12, fontFamily: "'DM Mono', monospace", marginTop: 4 }}>{ex.reps}</div>
             {ex.note && <div style={{ color: "#555", fontSize: 12, marginTop: 4 }}>{ex.note}</div>}
           </div>
@@ -478,6 +482,19 @@ function DayScreen({ day, session, activeExercise, setActiveExercise, updateSet,
         })}
       </div>
       <div style={{ flex: 1, overflowY: "auto", padding: "20px 20px 0" }} className="fadein">
+        {activeExercise === 0 && (
+          <div style={{ background: "#1a150a", border: "1px solid #2a200a", borderRadius: 10, padding: "12px 14px", marginBottom: 16 }}>
+            <div style={{ fontSize: 10, color: "#d97706", letterSpacing: 2, textTransform: "uppercase", marginBottom: 8, fontFamily: "'DM Mono', monospace" }}>Warm-up First</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              {WARMUP.map(w => (
+                <div key={w.id} style={{ display: "flex", justifyContent: "space-between", fontSize: 12 }}>
+                  <a href={stretchLink(w.name)} target="_blank" rel="noopener noreferrer" style={{ color: "#ccc", textDecoration: "underline", textDecorationColor: "#3a2f10" }}>{w.name}</a>
+                  <span style={{ color: "#d97706", fontFamily: "'DM Mono', monospace" }}>{w.reps}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
         {isProgrammed && (
           <div style={{ background: "#0d1a0d", border: "1px solid #1a3a1a", borderRadius: 10, padding: "10px 14px", marginBottom: 14 }}>
             <div style={{ fontSize: 10, color: "#4ade80", letterSpacing: 2, textTransform: "uppercase", marginBottom: 4, fontFamily: "'DM Mono', monospace" }}>Week {benchPrescription.week} · {benchPrescription.phase}</div>
@@ -494,31 +511,54 @@ function DayScreen({ day, session, activeExercise, setActiveExercise, updateSet,
         {ex.note && <div style={{ color: "#555", fontSize: 13, marginBottom: isLate ? 8 : 14 }}>{ex.note}</div>}
         {isLate && <div style={{ color: "#d97706", fontSize: 12, background: "#1a150a", border: "1px solid #2a200a", borderRadius: 8, padding: "8px 12px", marginBottom: 14 }}>Add in week 5-6</div>}
         <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 16 }}>
-          {Array.from({ length: ex.sets }, (_, si) => {
+          {Array.from({ length: (ex.warmupSets || 0) + ex.sets }, (_, si) => {
+            const warmupCount = ex.warmupSets || 0;
+            const isWarmup = si < warmupCount;
+            const workNum = isWarmup ? null : si - warmupCount + 1;
             const setData = session.sets[ex.id]?.[si] || { weight: "", reps: "" };
             const lastWt = getLastWeight(ex.id, si);
             const filled = setData.weight || setData.reps;
+
+            let weightLabel, weightPlaceholder, repsPlaceholder;
+            if (isWarmup) {
+              if (isProgrammed) {
+                const ramp = BENCH_WARMUP_RAMP[si] || BENCH_WARMUP_RAMP[BENCH_WARMUP_RAMP.length - 1];
+                const rampWeight = Math.round((benchPrescription.weight * ramp.pct) / 5) * 5;
+                weightLabel = `WEIGHT · target: ${rampWeight}`;
+                weightPlaceholder = String(rampWeight);
+                repsPlaceholder = String(ramp.reps);
+              } else {
+                weightLabel = "WEIGHT · go lighter";
+                weightPlaceholder = lastWt ? String(Math.round((lastWt * 0.7) / 5) * 5) : "lbs";
+                repsPlaceholder = String(ex.reps);
+              }
+            } else {
+              weightLabel = `WEIGHT${isProgrammed ? ` · target: ${benchPrescription.weight}` : lastWt ? ` · last: ${lastWt}` : ""}`;
+              weightPlaceholder = isProgrammed ? String(benchPrescription.weight) : lastWt || "lbs";
+              repsPlaceholder = isProgrammed ? String(benchPrescription.reps) : String(ex.reps);
+            }
+
             return (
               <div key={si} style={{
-                background: filled ? "#0d1a2a" : "#15151e",
-                border: `1px solid ${filled ? "#1e3a5a" : "#1e1e28"}`,
+                background: filled ? "#0d1a2a" : isWarmup ? "#151510" : "#15151e",
+                border: `1px solid ${filled ? "#1e3a5a" : isWarmup ? "#2a2a1a" : "#1e1e28"}`,
                 borderRadius: 10, padding: "12px 14px",
                 display: "flex", alignItems: "center", gap: 12,
               }}>
-                <div style={{ width: 30, height: 30, borderRadius: "50%", background: filled ? day.color : "#1e1e28", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: filled ? "#fff" : "#444", flexShrink: 0 }}>{si + 1}</div>
+                <div style={{ width: 30, height: 30, borderRadius: "50%", background: filled ? day.color : isWarmup ? "#2a2410" : "#1e1e28", display: "flex", alignItems: "center", justifyContent: "center", fontSize: isWarmup ? 11 : 13, fontWeight: 700, color: filled ? "#fff" : isWarmup ? "#d97706" : "#444", flexShrink: 0 }}>
+                  {isWarmup ? `W${si + 1}` : workNum}
+                </div>
                 <div style={{ flex: 1, display: "flex", gap: 10 }}>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 10, color: "#444", marginBottom: 5 }}>
-                      WEIGHT{isProgrammed ? ` · target: ${benchPrescription.weight}` : lastWt ? ` · last: ${lastWt}` : ""}
-                    </div>
+                    <div style={{ fontSize: 10, color: "#444", marginBottom: 5 }}>{weightLabel}</div>
                     <input type="number" inputMode="decimal"
-                      placeholder={isProgrammed ? String(benchPrescription.weight) : lastWt || "lbs"}
+                      placeholder={weightPlaceholder}
                       value={setData.weight} onChange={e => updateSet(ex.id, si, "weight", e.target.value)} style={inp()} />
                   </div>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: 10, color: "#444", marginBottom: 5 }}>REPS</div>
                     <input type="number" inputMode="numeric"
-                      placeholder={isProgrammed ? String(benchPrescription.reps) : String(ex.reps)}
+                      placeholder={repsPlaceholder}
                       value={setData.reps} onChange={e => updateSet(ex.id, si, "reps", e.target.value)} style={inp()} />
                   </div>
                 </div>
@@ -552,12 +592,12 @@ function DayScreen({ day, session, activeExercise, setActiveExercise, updateSet,
 
 function BenchScreen({ benchLog, onBack }) {
   const log = [...benchLog].sort((a, b) => b.date.localeCompare(a.date));
-  const COMPLETED = 10;
+  const COMPLETED = 0;
   const nextIdx = Math.min(COMPLETED + benchLog.length, BENCH_PROGRAM.length - 1);
   const next = BENCH_PROGRAM[nextIdx];
   return (
     <div style={wrap()}>
-      <TopBar title="Bench Program" sub="16-Week | 210 → 240 lbs" color="#4ade80" onBack={onBack} />
+      <TopBar title="Bench Program" sub="8-Week | 225 → 255 lbs" color="#4ade80" onBack={onBack} />
       <div style={{ flex: 1, overflowY: "auto", padding: 20 }}>
         {next && (
           <div style={{ background: "#0d1f0d", border: "1px solid #1a3a1a", borderRadius: 12, padding: 16, marginBottom: 20 }}>
@@ -567,11 +607,11 @@ function BenchScreen({ benchLog, onBack }) {
             {next.note && <div style={{ fontSize: 12, color: "#555", marginTop: 8 }}>{next.note}</div>}
           </div>
         )}
-        <div style={{ fontSize: 11, color: "#444", letterSpacing: 2, textTransform: "uppercase", marginBottom: 12 }}>Full 16-Week Schedule</div>
+        <div style={{ fontSize: 11, color: "#444", letterSpacing: 2, textTransform: "uppercase", marginBottom: 12 }}>Full 8-Week Schedule</div>
         {[1,2,3,4].map(phase => {
-          const ranges = [[1,4],[5,8],[9,12],[13,16]];
+          const ranges = [[1,2],[3,4],[5,6],[7,8]];
           const [start, end] = ranges[phase-1];
-          const names = ["Volume","Strength","Power","Peak/Test"];
+          const names = ["Re-Entry","Build","Strength","Peak/Test"];
           const colors = ["#60a5fa","#f59e0b","#f87171","#4ade80"];
           const weeks = Array.from({length: end-start+1}, (_,i) => i+start);
           return (
