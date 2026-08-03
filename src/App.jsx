@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const SUPABASE_URL = "https://xsgdvhfhibstymoriocw.supabase.co";
 const SUPABASE_KEY = "sb_publishable_iJaYFSGQcNbEGdBr8sQC-A_rft4jxhS";
@@ -148,6 +148,55 @@ function formatDate(d) {
   return `${months[parseInt(m)-1]} ${parseInt(day)}`;
 }
 function uid() { return Math.random().toString(36).slice(2, 10); }
+
+let _audioCtx = null;
+function beep() {
+  try {
+    _audioCtx = _audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    if (_audioCtx.state === "suspended") _audioCtx.resume();
+    const now = _audioCtx.currentTime;
+    [0, 0.18].forEach(offset => {
+      const osc = _audioCtx.createOscillator();
+      const gain = _audioCtx.createGain();
+      osc.type = "sine";
+      osc.frequency.value = 880;
+      gain.gain.setValueAtTime(0.0001, now + offset);
+      gain.gain.exponentialRampToValueAtTime(0.3, now + offset + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + offset + 0.15);
+      osc.connect(gain).connect(_audioCtx.destination);
+      osc.start(now + offset);
+      osc.stop(now + offset + 0.16);
+    });
+  } catch {}
+}
+
+function useRestTimer() {
+  const [endAt, setEndAt] = useState(null);
+  const [remaining, setRemaining] = useState(0);
+  const firedRef = useRef(false);
+
+  useEffect(() => {
+    if (!endAt) return;
+    firedRef.current = false;
+    const tick = () => {
+      const left = Math.max(0, Math.round((endAt - Date.now()) / 1000));
+      setRemaining(left);
+      if (left === 0 && !firedRef.current) {
+        firedRef.current = true;
+        beep();
+      }
+    };
+    tick();
+    const id = setInterval(tick, 250);
+    return () => clearInterval(id);
+  }, [endAt]);
+
+  const start = (seconds) => setEndAt(Date.now() + seconds * 1000);
+  const adjust = (deltaSeconds) => setEndAt(prev => prev ? Math.max(Date.now(), prev + deltaSeconds * 1000) : null);
+  const clear = () => setEndAt(null);
+
+  return { active: !!endAt && remaining > 0, remaining, start, adjust, clear };
+}
 
 const G = () => (
   <style>{`
@@ -425,6 +474,8 @@ function EditDayScreen({ day, onSave, onBack }) {
 
 function DayScreen({ day, session, activeExercise, setActiveExercise, updateSet, updateNote, onSave, onBack, getLastWeight, swimLog, setSwimLog, saving, error, benchPrescription }) {
   const exercises = day.exercises;
+  const restTimer = useRestTimer();
+  const triggeredRef = useRef({});
 
   if (day.swim) return (
     <div style={wrap()}>
@@ -559,7 +610,15 @@ function DayScreen({ day, session, activeExercise, setActiveExercise, updateSet,
                     <div style={{ fontSize: 10, color: "#444", marginBottom: 5 }}>REPS</div>
                     <input type="number" inputMode="numeric"
                       placeholder={repsPlaceholder}
-                      value={setData.reps} onChange={e => updateSet(ex.id, si, "reps", e.target.value)} style={inp()} />
+                      value={setData.reps} onChange={e => updateSet(ex.id, si, "reps", e.target.value)}
+                      onBlur={() => {
+                        const key = `${ex.id}-${si}`;
+                        if (setData.weight && setData.reps && triggeredRef.current[key] !== setData.reps) {
+                          triggeredRef.current[key] = setData.reps;
+                          restTimer.start(isWarmup ? 60 : 120);
+                        }
+                      }}
+                      style={inp()} />
                   </div>
                 </div>
               </div>
@@ -574,6 +633,17 @@ function DayScreen({ day, session, activeExercise, setActiveExercise, updateSet,
         </div>
         {error && <Err msg={error} />}
       </div>
+      {restTimer.active && (
+        <div style={{ padding: "10px 20px", background: "#0d1a2a", borderTop: "1px solid #1e3a5a", flexShrink: 0, display: "flex", alignItems: "center", gap: 12 }}>
+          <button onClick={() => restTimer.adjust(-30)} style={{ background: "#1e1e28", border: "none", color: "#888", width: 34, height: 34, borderRadius: 8, fontSize: 12, fontWeight: 600, flexShrink: 0 }}>-30</button>
+          <div style={{ flex: 1, textAlign: "center" }}>
+            <div style={{ fontSize: 10, color: "#60a5fa", letterSpacing: 2, textTransform: "uppercase", fontFamily: "'DM Mono', monospace" }}>Rest</div>
+            <div style={{ fontSize: 24, fontWeight: 700, fontFamily: "'DM Mono', monospace" }}>{String(Math.floor(restTimer.remaining / 60)).padStart(1, "0")}:{String(restTimer.remaining % 60).padStart(2, "0")}</div>
+          </div>
+          <button onClick={() => restTimer.adjust(30)} style={{ background: "#1e1e28", border: "none", color: "#888", width: 34, height: 34, borderRadius: 8, fontSize: 12, fontWeight: 600, flexShrink: 0 }}>+30</button>
+          <button onClick={restTimer.clear} style={{ background: "#1e1e28", border: "none", color: "#666", padding: "0 14px", height: 34, borderRadius: 8, fontSize: 12, flexShrink: 0 }}>Skip</button>
+        </div>
+      )}
       <BottomBar>
         <div style={{ display: "flex", gap: 10 }}>
           {activeExercise > 0 && (
