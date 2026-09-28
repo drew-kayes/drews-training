@@ -76,7 +76,19 @@ function exerciseLink(ex) {
 
 const DEFAULT_DAYS = [
   {
-    id: "day1", label: "Monday", title: "Chest / Shoulders / Tris", color: "#2563eb",
+    id: "day3", label: "Monday", title: "Legs", color: "#059669",
+    note: "First session of the week on purpose. Loads start low, your lower back sets the ceiling here, not your quads.",
+    exercises: [
+      { id: "sled", name: "Sled Press", sets: 3, reps: "12", weight: 135, note: "Feet low and hip-width or narrower for quad emphasis. Weight = plates loaded.", warmupSets: 2, videoQuery: "sled press machine proper form" },
+      { id: "rdl", name: "Romanian Deadlift", sets: 3, reps: "10", weight: 95, note: "Hips back, bar drags down the legs. Stop the set when your back rounds, not when your hamstrings are done.", videoQuery: "romanian deadlift proper form" },
+      { id: "leg_ext", name: "Leg Extension Machine", sets: 3, reps: "12", weight: 70, note: "Quad iso. Full contraction at the top, slow negative.", videoQuery: "leg extension machine proper form" },
+      { id: "hip_thrust", name: "Hip Thrust Machine", sets: 3, reps: "12", weight: 110, note: "Glute iso. Pause and squeeze at the top.", videoQuery: "hip thrust machine proper form" },
+      { id: "stand_calf", name: "Standing Calf Raise", sets: 4, reps: "15", weight: 120, note: "Heavy. 3-sec negative. Full stretch.", videoQuery: "standing calf raise proper form" },
+      { id: "seat_calf", name: "Seated Calf Raise", sets: 3, reps: "15", weight: 90, note: "Soleus. Different angle than standing.", videoQuery: "seated calf raise proper form" },
+    ],
+  },
+  {
+    id: "day1", label: "Tuesday", title: "Chest / Shoulders / Tris", color: "#2563eb",
     note: "Bench follows the 16-week program. Everything after it supports the press.",
     exercises: [
       { id: "bench", name: "Flat Barbell Bench Press", sets: 4, reps: "8", weight: 140, note: "Weight comes from the bench program above.", programmed: true, warmupSets: 3 },
@@ -90,7 +102,7 @@ const DEFAULT_DAYS = [
     ],
   },
   {
-    id: "day2", label: "Tuesday", title: "Back / Biceps", color: "#7c3aed",
+    id: "day2", label: "Thursday", title: "Back / Biceps", color: "#7c3aed",
     note: "Cable row is the anchor. Preacher and hammer curls drive arm thickness.",
     exercises: [
       { id: "pullup", name: "Pull-Up", sets: 4, reps: "8", weight: 0, note: "Bodyweight to start, log added load here once you clear 4x8 clean. Assisted machine is fine, log the assist as a negative.", videoQuery: "pull up proper form" },
@@ -103,23 +115,11 @@ const DEFAULT_DAYS = [
     ],
   },
   {
-    id: "day3", label: "Thursday", title: "Legs", color: "#059669",
-    note: "Loads start low on purpose. Your lower back sets the ceiling here, not your quads.",
-    exercises: [
-      { id: "sled", name: "Sled Press", sets: 3, reps: "12", weight: 135, note: "Feet low and hip-width or narrower for quad emphasis. Weight = plates loaded.", warmupSets: 2, videoQuery: "sled press machine proper form" },
-      { id: "rdl", name: "Romanian Deadlift", sets: 3, reps: "10", weight: 95, note: "Hips back, bar drags down the legs. Stop the set when your back rounds, not when your hamstrings are done.", videoQuery: "romanian deadlift proper form" },
-      { id: "leg_ext", name: "Leg Extension Machine", sets: 3, reps: "12", weight: 70, note: "Quad iso. Full contraction at the top, slow negative.", videoQuery: "leg extension machine proper form" },
-      { id: "hip_thrust", name: "Hip Thrust Machine", sets: 3, reps: "12", weight: 110, note: "Glute iso. Pause and squeeze at the top.", videoQuery: "hip thrust machine proper form" },
-      { id: "stand_calf", name: "Standing Calf Raise", sets: 4, reps: "15", weight: 120, note: "Heavy. 3-sec negative. Full stretch.", videoQuery: "standing calf raise proper form" },
-      { id: "seat_calf", name: "Seated Calf Raise", sets: 3, reps: "15", weight: 90, note: "Soleus. Different angle than standing.", videoQuery: "seated calf raise proper form" },
-    ],
-  },
-  {
     id: "day5", label: "Friday", title: "Upper / Arms", color: "#2563eb",
-    note: "Hypertrophy day. Keep the press moderate, Monday's bench is the priority.",
+    note: "Hypertrophy day. Keep the press moderate, Tuesday's bench is the priority.",
     exercises: [
       { id: "flat_db", name: "Flat Dumbbell Press", sets: 4, reps: "10", weight: 50, note: "Per dumbbell. Secondary press, do not max out.", videoQuery: "flat dumbbell press proper form" },
-      { id: "cs_row", name: "Chest-Supported Row", sets: 3, reps: "12", weight: 70, note: "Zero lower back involvement. Squeeze the shoulder blades.", videoQuery: "chest supported row form" },
+      { id: "cable_fly", name: "Cable Fly / Pec Deck", sets: 3, reps: "12", weight: 45, note: "Replaces the row here, back volume is spent on Thursday. Full stretch at the open position.", videoQuery: "cable fly chest proper form" },
       { id: "arnold", name: "Arnold Press", sets: 3, reps: "10", weight: 35, note: "Per dumbbell. Full rotation, all three delt heads.", videoQuery: "arnold press proper form" },
       { id: "face_pull", name: "Face Pull", sets: 3, reps: "15", weight: 40, note: "Rear delt and rotator cuff. Do not skip.", videoQuery: "face pull proper form" },
       { id: "reverse_curl", name: "Reverse Curl", sets: 3, reps: "12", weight: 45, note: "Weight includes the EZ bar. Forearm size.", videoQuery: "reverse curl proper form" },
@@ -855,3 +855,4 @@ const wrap = () => ({ minHeight: "100vh", background: "#0f0f13", display: "flex"
 const inp = () => ({ background: "#1e1e28", border: "1px solid #2a2a38", borderRadius: 8, color: "#f0f0f0", fontSize: 16, padding: "10px 12px", width: "100%", fontFamily: "'DM Mono', monospace" });
 const btn = (bg) => ({ background: bg, border: "none", borderRadius: 10, color: "#fff", fontSize: 15, fontWeight: 600, padding: 15, width: "100%", fontFamily: "'DM Sans', sans-serif" });
 const pill = (bg, color) => ({ background: bg, border: "1px solid #2a2a38", borderRadius: 20, color, fontSize: 12, fontWeight: 500, padding: "7px 16px", fontFamily: "'DM Sans', sans-serif" });
+
